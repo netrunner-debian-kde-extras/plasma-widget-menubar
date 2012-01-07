@@ -1,0 +1,14 @@
+Source: plasma-widget-menubar
+Section: kde
+Priority: extra
+Maintainer: Debian KDE Extras Team <pkg-kde-extras@lists.alioth.debian.org>
+Uploaders: Ritesh Raj Sarraf <rrs@debian.org>
+Build-Depends: debhelper (>= 7.0.50~), libqt4-dev (>= 4.8), kdelibs-bin, cmake, kdelibs5-dev, kdebase-workspace-dev, libx11-dev, libxext-dev
+Standards-Version: 3.9.2
+Homepage: https://launchpad.net/plasma-widget-menubar
+
+Package: plasma-widget-menubar
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: plasma widget to display menubar of application windows
+ plasma widget to display menubar of application windows
