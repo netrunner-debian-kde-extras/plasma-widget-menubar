@@ -1,0 +1,16 @@
+- Check copy is clean and up to date
+  bzr st
+  bzr pull
+- Update NEWS
+  r!bzr log --line -n0 -r tag:x.y.z-1..
+- Bump version number in CMakeLists.txt
+- Commit
+- Create tarball
+- Unpack tarball, build and run tests
+- If ok, create "x.y.z" tag
+  tag=x.y.z
+  bzr tag $tag
+- Push
+  bzr push
+- Upload tarball
+  lp-project-upload plasma-widget-menubar $tag plasma-widget-menubar-$tag.tar.bz2

@@ -1,0 +1,17 @@
+# testMenuItemVisibility
+- Start gnome-terminal => menubar shows, without a "Tabs" item
+- Open a new tab => "Tabs" item appear before "Help" item
+- Close tab => "Tabs" item disappear
+
+# testGtkAppShowMenubarAtStartup
+- Start any GTK app => menubar shows, without the need to alt-tab
+
+# testOverflow
+## basic
+- Start tests/largemenubar.py and widget in plasmoidviewer => menubar shows with the overflow button
+- Resize plasmoidviewer => menubar items show and hide depending on available width
+- Click overflow button => hidden items appear
+
+## keyboardNavigation
+- Click overflow button, press left arrow => last visible item is selected
+- Click overflow button, press right arrow => first visible item is selected
