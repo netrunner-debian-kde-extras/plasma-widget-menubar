@@ -11,6 +11,7 @@ Package: plasma-widget-menubar
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: plasma widget to display menubar of application windows
- plasma widget to display menubar of application windows
+ plamsa-widget-menubar provides a unified global menubar for all KDE
+ and Qt applications
  .
- It provides a unified global menubar for all KDE and Qt applications
+ It is provided as a widget which can be added to the panel
