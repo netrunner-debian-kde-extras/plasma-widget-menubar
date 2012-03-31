@@ -1,5 +1,5 @@
-plasma-widget-menubar (0.1.16) UNRELEASED; urgency=low
+plasma-widget-menubar (0.1.16) experimental; urgency=low
 
-  * Initial release. (Closes: #XXXXXX)
+  * Initial release. (Closes: #666495)
 
- -- Ritesh Raj Sarraf <rrs@debian.org>  Sat, 07 Jan 2012 13:30:07 +0530
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Sat, 31 Mar 2012 13:17:20 +0530
