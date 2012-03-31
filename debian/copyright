@@ -1,16 +1,44 @@
-This package was debianized by Ritesh Raj Sarraf <rrs@debian.org> on
-Tue Nov 22 02:53:51 IST 2011
+Format: http://dep.debian.net/deps/dep5
+Upstream-Name: plasma-widget-menubar
+Upstream-Contact: Aurélien Gâteau <agateau@kde.org>
+Source: https://launchpad.net/plasma-widget-menubar
 
-It was downloaded from https://launchpad.net/appmenu-qt
+Copyright: Aurélien Gâteau <agateau@kde.org>
 
-Upstream Author:
+Files: *
+License: GPL
+ This package is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License version 3, as
+ published by  the Free Software Foundation
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Lesser General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this package; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+ .
+ On Debian systems, the complete text of the GNU General Public License
+ can be found in /usr/share/common-licenses/GPL
 
-   Aurélien Gâteau <agateau@kde.org>
 
-Copyright:
-
- Copyright (C) 2009-2011 Aurélien Gâteau <agateau@kde.org>
-
-License:
-    This package is licensed under the GPL, 
-    see `/usr/share/common-licenses/GPL'.
+Files: debian/*
+Copyright: 2012 Ritesh Raj Sarraf
+License: GPL
+ This package is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License, as
+ published by  the Free Software Foundation
+ .
+ This package is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this package; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+ .
+ On Debian systems, the complete text of the GNU General Public License
+ can be found in /usr/share/common-licenses/GPL
