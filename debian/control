@@ -12,3 +12,5 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: plasma widget to display menubar of application windows
  plasma widget to display menubar of application windows
+ .
+ It provides a unified global menubar for all KDE and Qt applications
