@@ -21,6 +21,18 @@ class QDBusObjectPath;
 class QDBusServiceWatcher;
 class QMenu;
 
+/**
+ * Represents an item with its children. GetLayout() returns a
+ * DBusMenuLayoutItemList.
+ */
+struct DBusMenuLayoutItem
+{
+    int id;
+    QVariantMap properties;
+    QList<DBusMenuLayoutItem> children;
+};
+Q_DECLARE_METATYPE(DBusMenuLayoutItem)
+
 struct MenuInfo
 {
     MenuInfo()
@@ -59,6 +71,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotServiceUnregistered(const QString& service);
+    void slotLayoutUpdated(uint revision, int parentId);
 
 private:
     QDBusServiceWatcher* mServiceWatcher;

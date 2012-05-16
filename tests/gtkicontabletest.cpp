@@ -9,8 +9,8 @@
  * License: GPL v3
  */
 
-// KDE
-#include <qtest_kde.h>
+// Qt
+#include <QtTest>
 
 // Local
 #include "gtkicontable.h"
@@ -52,6 +52,6 @@ private Q_SLOTS:
 
 };
 
-QTEST_KDEMAIN(GtkActionTest, GUI)
+QTEST_APPLESS_MAIN(GtkActionTest)
 
 #include "gtkactiontest.moc"

@@ -26,6 +26,39 @@
 static const char* DBUS_SERVICE = "com.canonical.AppMenu.Registrar";
 static const char* DBUS_OBJECT_PATH = "/com/canonical/AppMenu/Registrar";
 
+// Marshalling code for DBusMenuLayoutItem
+QDBusArgument &operator<<(QDBusArgument &argument, const DBusMenuLayoutItem &obj)
+{
+    argument.beginStructure();
+    argument << obj.id << obj.properties;
+    argument.beginArray(qMetaTypeId<QDBusVariant>());
+    Q_FOREACH(const DBusMenuLayoutItem& child, obj.children) {
+        argument << QDBusVariant(QVariant::fromValue<DBusMenuLayoutItem>(child));
+    }
+    argument.endArray();
+    argument.endStructure();
+    return argument;
+}
+
+const QDBusArgument &operator>>(const QDBusArgument &argument, DBusMenuLayoutItem &obj)
+{
+    argument.beginStructure();
+    argument >> obj.id >> obj.properties;
+    argument.beginArray();
+    while (!argument.atEnd()) {
+        QDBusVariant dbusVariant;
+        argument >> dbusVariant;
+        QDBusArgument childArgument = dbusVariant.variant().value<QDBusArgument>();
+
+        DBusMenuLayoutItem child;
+        childArgument >> child;
+        obj.children.append(child);
+    }
+    argument.endArray();
+    argument.endStructure();
+    return argument;
+}
+
 // Marshalling code for MenuInfo
 QDBusArgument& operator<<(QDBusArgument& argument, const MenuInfo& info)
 {
@@ -52,11 +85,16 @@ Registrar::Registrar(QObject* parent)
     mServiceWatcher->setConnection(QDBusConnection::sessionBus());
     mServiceWatcher->setWatchMode(QDBusServiceWatcher::WatchForUnregistration);
     connect(mServiceWatcher, SIGNAL(serviceUnregistered(const QString&)), SLOT(slotServiceUnregistered(const QString&)));
+
+    QDBusConnection::sessionBus().connect("", "", "com.canonical.dbusmenu", "LayoutUpdated",
+                                          this, SLOT(slotLayoutUpdated(uint,int)));
 }
 
 Registrar::~Registrar()
 {
     QDBusConnection::sessionBus().unregisterService(mService);
+    QDBusConnection::sessionBus().disconnect("", "", "com.canonical.dbusmenu", "LayoutUpdated",
+                                             this, SLOT(slotLayoutUpdated(uint,int)));
 }
 
 bool Registrar::connectToBus(const QString& _service, const QString& _path)
@@ -119,4 +157,24 @@ void Registrar::slotServiceUnregistered(const QString& service)
         }
     }
     mServiceWatcher->removeWatchedService(service);
+}
+
+void Registrar::slotLayoutUpdated(uint /*revision*/, int parentId)
+{
+    // Copy code from http://quickgit.kde.org/index.php?p=kded-appmenu.git&a=blob&h=9526cce6119e7e87a22cc83da0d57e3c12930d02&hb=4e091af2dcb07c8e0d05a27f2c68a700fcf2b4f4&f=src%2Fmodule%2Fappme
+    // Fake unity-panel-service weird behavior of calling aboutToShow on
+    // startup. This is necessary for Firefox menubar to work correctly at
+    // startup.
+    // See: https://bugs.launchpad.net/plasma-widget-menubar/+bug/878165
+
+    if (parentId == 0) { //root menu
+        QDBusInterface iface(message().service(), message().path(), "com.canonical.dbusmenu");
+        QDBusMessage reply = iface.call("GetLayout", 0, 1, QStringList());
+        QDBusArgument arg = reply.arguments()[1].value<QDBusArgument>();
+        DBusMenuLayoutItem root;
+        arg >> root;
+        Q_FOREACH(const DBusMenuLayoutItem& dbusMenuItem, root.children) {
+            iface.asyncCall("AboutToShow", dbusMenuItem.id);
+        }
+    }
 }

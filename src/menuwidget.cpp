@@ -34,6 +34,7 @@ MenuWidget::MenuWidget(Plasma::Applet* applet)
 , mRootMenu(0)
 , mOverflowButton(createButton())
 , mCurrentButton(0)
+, mLastMousePosition(-1, -1)
 {
     mOverflowButton->setText(QString::fromUtf8("…"));
     mOverflowButton->setMenu(new QMenu);
@@ -59,6 +60,18 @@ void MenuWidget::setMenu(QMenu* menu)
 
 void MenuWidget::updateButtons()
 {
+    if (mCurrentButton) {
+        // Do not update if there is a current button: we do not want to change
+        // the menubar while the user is using it.
+        // It would be especially wrong because the opened menu would then not
+        // be associated with its button anymore, causing the menu to stay
+        // opened when navigating to the next menu with arrows.
+        //
+        // Start mUpdateButtonsTimer in the unprobable case that this method is
+        // called from setMenu() and mCurrentButton is not NULL.
+        mUpdateButtonsTimer->start();
+        return;
+    }
     mUpdateButtonsTimer->stop();
 
     // Create buttons for each actions in mRootMenu, reusing existing buttons if possible
@@ -212,7 +225,6 @@ void MenuWidget::showNextPrevMenu(bool next)
         }
     }
     if (button) {
-        kWarning() << "nextPrevButton" << button->text();
         showMenu(button);
     }
 }
@@ -222,6 +234,8 @@ void MenuWidget::showMenu(MenuButton* button)
     if (mCurrentButton) {
         bool justHide = mCurrentButton == button;
         mCurrentButton->menu()->hide();
+        // Note: When we reach this line mCurrentButton is 0: it has been
+        // updated by slotAboutToHideMenu().
         if (justHide) {
             return;
         }
@@ -240,12 +254,29 @@ void MenuWidget::showMenu(MenuButton* button)
     qApp->processEvents();
     menu->popup(pos);
 
+    startMouseChecker();
+}
+
+void MenuWidget::startMouseChecker()
+{
+    mLastMousePosition = mApplet->view()->mapFromGlobal(QCursor::pos());
     mMouseChecker->start();
 }
 
 void MenuWidget::checkMousePosition()
 {
+    // Checks whether mouse moved while a menu is opened. In this case when the
+    // mouse moves over another button, we show this button menu.
     QPoint pos = mApplet->view()->mapFromGlobal(QCursor::pos());
+    if (pos == mLastMousePosition) {
+        // Do nothing if mouse hasn't moved. Otherwise if users press an arrow
+        // key to open the next menu, we would come back to the menu under the
+        // mouse cursor as soon as we came back here.
+        // See: https://bugs.launchpad.net/plasma-widget-menubar/+bug/878786
+        return;
+    }
+    mLastMousePosition = pos;
+
     QGraphicsItem* item = mApplet->view()->itemAt(pos);
     if (!item) {
         return;
@@ -373,7 +404,7 @@ QSizeF MenuWidget::sizeHint(Qt::SizeHint which, const QSizeF& constraint) const
         fullSize.rwidth() += button->minimumWidth();
         fullSize.setHeight(qMax(fullSize.height(), button->minimumHeight()));
     }
-    
+
     if (which == Qt::MinimumSize) {
         return mOverflowButton->minimumSize();
     } if (which == Qt::PreferredSize) {
