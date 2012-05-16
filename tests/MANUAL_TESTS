@@ -15,3 +15,16 @@
 ## keyboardNavigation
 - Click overflow button, press left arrow => last visible item is selected
 - Click overflow button, press right arrow => first visible item is selected
+
+# testMenuUpdateWhileOpen
+# (this test checks menubar updates are put on hold while a menu is visible)
+- Start tests/updatingmenubar.py and widget in plasmoidviewer => menubar shows
+- Wait until updatingmenubar.py prints "Ready" on the terminal
+- Click "File" => "File" menu appears
+- Press right arrow => "File" menu disappars, "Update" menu appears, no new menu item appears
+- Press Escape => "Update" menu disappears, a "New" menu item appears at the end of the menubar
+
+# testFastScrubling
+- Start tests/largemenubar.py and widget in plasmoidviewer => menubar shows
+- Open the first menu => menu appears
+- Press and hold the right arrow => menus get opened one after the other, there is always only one menu visible

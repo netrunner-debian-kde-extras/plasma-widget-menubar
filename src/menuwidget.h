@@ -87,6 +87,7 @@ private:
     QList<MenuButton*> mMenuButtonList;
     MenuButton* mOverflowButton;
     MenuButton* mCurrentButton;
+    QPoint mLastMousePosition;
 
     void showNextPrevMenu(bool next);
     MenuButton* createButton();
@@ -95,5 +96,6 @@ private:
     bool subMenuEventFilter(QMenu*, QEvent*);
 
     void updateButtonsGeometries();
+    void startMouseChecker();
 };
 #endif /* MENUWIDGET_H */
