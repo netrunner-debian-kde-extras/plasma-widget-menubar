@@ -1,3 +1,14 @@
+plasma-widget-menubar (0.1.17-1) unstable; urgency=low
+
+  * New upstream release
+  * Upload to unstable
+  * [ab2d37b] Imported Upstream version 0.1.17
+  * [0349cd4] update standards version to 3.9.3
+    - [9239fe8] update copyright to machine readable format 1.0
+    - [e69a5f4] add Vcs headers
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Thu, 17 May 2012 01:30:31 +0530
+
 plasma-widget-menubar (0.1.16-1) experimental; urgency=low
 
   * Initial release. (Closes: #666495)
