@@ -12,6 +12,7 @@ Vcs-Browser: http://git.debian.org/?p=pkg-kde/kde-extras/plasma-widget-menubar.g
 Package: plasma-widget-menubar
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: appmenu-qt
 Description: plasma widget to display menubar of application windows
  plamsa-widget-menubar provides a unified global menubar for all KDE
  and Qt applications
