@@ -38,50 +38,17 @@
 #include "menucloner.h"
 #include "menuutils.h"
 #include "menuwidget.h"
-#include "registrar.h"
+#include "kappmenuimporter.h"
 #include "rendereradaptor.h"
 #include "windowmenumanager.h"
-
-class MyDBusMenuImporter : public DBusMenuImporter
-{
-public:
-    MyDBusMenuImporter(const QString &service, const QString &path, GtkIconTable *table, QObject *parent)
-    : DBusMenuImporter(service, path, parent)
-    , mService(service)
-    , mPath(path)
-    , mGtkIconTable(table)
-    {}
-
-    QString service() const { return mService; }
-    QString path() const { return mPath; }
-
-protected:
-    virtual QIcon iconForName(const QString &name_)
-    {
-        QString name;
-        if (name_.startsWith("gtk")) {
-            name = mGtkIconTable->value(name_);
-        } else {
-            name = name_;
-        }
-        return KIcon(name);
-    }
-
-private:
-    QString mService;
-    QString mPath;
-    GtkIconTable *mGtkIconTable;
-};
-
 
 K_EXPORT_PLASMA_APPLET(menubarapplet, MenuBarApplet)
 
 
 MenuBarApplet::MenuBarApplet(QObject* parent, const QVariantList& args)
 : Plasma::Applet(parent, args)
-, mGtkIconTable("/usr/share/icons/gnome/16x16") // FIXME Do not hardcode path
 , mLayout(new QGraphicsLinearLayout(this))
-, mRegistrar(new Registrar(this))
+, mKAppMenuImporter(new KAppMenuImporter())
 , mDesktopMenu(new QMenu)
 , mWindowMenuManager(new WindowMenuManager(this))
 , mWindowMenu(new QMenu)
@@ -89,7 +56,6 @@ MenuBarApplet::MenuBarApplet(QObject* parent, const QVariantList& args)
 , mActiveWinId(0)
 , mMenuWidget(0)
 {
-    mGtkIconTable.setRightToLeft(QApplication::isRightToLeft());
     setBackgroundHints(StandardBackground);
     setAspectRatioMode(Plasma::IgnoreAspectRatio);
 }
@@ -110,15 +76,10 @@ void MenuBarApplet::init()
 
     updateSizePolicy();
 
-    if (!mRegistrar->connectToBus()) {
-        kWarning() << "Could not connect registrar to DBus";
-        return;
-    }
+    connect(mKAppMenuImporter, SIGNAL(windowRegistered(WId)),
+        SLOT(slotWindowRegistered(WId)));
 
-    connect(mRegistrar, SIGNAL(WindowRegistered(WId, const QString&, const QDBusObjectPath&)),
-        SLOT(slotWindowRegistered(WId, const QString&, const QDBusObjectPath&)));
-
-    connect(mRegistrar, SIGNAL(WindowUnregistered(WId)),
+    connect(mKAppMenuImporter, SIGNAL(windowUnregistered(WId)),
         SLOT(slotWindowUnregistered(WId)));
 
     connect(this, SIGNAL(activate()), SLOT(slotActivated()));
@@ -188,7 +149,7 @@ static bool isDesktopWinId(WId winId)
 void MenuBarApplet::createMenuBar()
 {
     WId winId = mActiveWinId;
-    QMenu* menu = menuForWinId(winId);
+    QMenu* menu = mKAppMenuImporter->menuForWinId(winId);
 
     if (!menu) {
         if (winId && !isDesktopWinId(winId)) {
@@ -311,26 +272,15 @@ void MenuBarApplet::updateActiveWinId()
     createMenuBar();
 }
 
-void MenuBarApplet::slotWindowRegistered(WId wid, const QString& service, const QDBusObjectPath& menuObjectPath)
+void MenuBarApplet::slotWindowRegistered(WId wid)
 {
-    MyDBusMenuImporter* importer = new MyDBusMenuImporter(service, menuObjectPath.path(), &mGtkIconTable, this);
-    delete mImporters.take(wid);
-    mImporters.insert(wid, importer);
-    connect(importer, SIGNAL(actionActivationRequested(QAction*)), SLOT(slotActionActivationRequested(QAction*)));
-    QMetaObject::invokeMethod(importer, "updateMenu", Qt::QueuedConnection);
-
-    // If the window is already active, create the menubar (Happens with GTK apps)
-    if (KWindowSystem::activeWindow() == wid) {
+    if (wid == mActiveWinId) {
         createMenuBar();
     }
 }
 
 void MenuBarApplet::slotWindowUnregistered(WId wid)
 {
-    MyDBusMenuImporter* importer = mImporters.take(wid);
-    if (importer) {
-        importer->deleteLater();
-    }
     if (wid == mActiveWinId) {
         mActiveWinId = 0;
         createMenuBar();

@@ -1,3 +1,9 @@
+# 0.2.0 2012.12.12
+- Use kded appmenu registrar
+
+# 0.1.18 - 2012.06.01
+- Fix crash which can happen when system is loaded (LP BUG #998630) (Aurélien Gâteau)
+
 # 0.1.17 - 2012.04.03
 - Fix keyboard navigation when cursor is over a button (LP BUG #878786) (Aurélien Gâteau)
 - Prevent multiple menus from being open at once if menubar is updated while opened (Aurélien Gâteau)
