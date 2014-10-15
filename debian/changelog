@@ -1,3 +1,17 @@
+plasma-widget-menubar (0.2.0-2) unstable; urgency=medium
+
+  [ Felix Geyer ]
+  * [ce20be6] Switch to debhelper compat level v9 which exports build flags.
+  * [b2a8456] Enable parallel building.
+  * [e2096e2] Append -Wl,--as-needed to LDFLAGS.
+  * [923346c] Remove unnecessary build-depends.
+  * [631ae0e] Use the pkg-kde-tools dh helper.
+
+  [ Ritesh Raj Sarraf ]
+  * [4695378] Bump Debhelper dependency to 9.0
+
+ -- Felix Geyer <fgeyer@debian.org>  Wed, 15 Oct 2014 13:53:49 +0530
+
 plasma-widget-menubar (0.2.0-1) unstable; urgency=medium
 
   * [88906e3] Imported Upstream version 0.2.0
