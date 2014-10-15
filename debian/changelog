@@ -9,8 +9,9 @@ plasma-widget-menubar (0.2.0-2) unstable; urgency=medium
 
   [ Ritesh Raj Sarraf ]
   * [4695378] Bump Debhelper dependency to 9.0
+  * [a66590a] Add pkg-kde-tools build dependency
 
- -- Felix Geyer <fgeyer@debian.org>  Wed, 15 Oct 2014 13:53:49 +0530
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Wed, 15 Oct 2014 14:07:39 +0530
 
 plasma-widget-menubar (0.2.0-1) unstable; urgency=medium
 
