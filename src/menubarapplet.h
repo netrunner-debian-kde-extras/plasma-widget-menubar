@@ -20,10 +20,7 @@
 // KDE
 #include <Plasma/Applet>
 
-// Local
-#include "gtkicontable.h"
-
-class Registrar;
+class KAppMenuImporter;
 class MenuCloner;
 class MyDBusMenuImporter;
 class WindowMenuManager;
@@ -53,7 +50,7 @@ private Q_SLOTS:
     void applyConfig();
     void slotActivated();
     void updateActiveWinId();
-    void slotWindowRegistered(WId, const QString& service, const QDBusObjectPath& path);
+    void slotWindowRegistered(WId);
     void slotWindowUnregistered(WId);
     void slotActionActivationRequested(QAction* action);
     void fillDesktopMenu();
@@ -61,9 +58,8 @@ private Q_SLOTS:
 private:
     typedef QHash<WId, MyDBusMenuImporter*> ImporterForWId;
 
-    GtkIconTable mGtkIconTable;
     QGraphicsLinearLayout* mLayout;
-    Registrar* mRegistrar;
+    KAppMenuImporter* mKAppMenuImporter;
     QMenu* mDesktopMenu;
     WindowMenuManager* mWindowMenuManager;
     QMenu* mWindowMenu;

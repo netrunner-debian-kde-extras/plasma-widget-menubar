@@ -4,17 +4,14 @@ include_directories(
     )
 
 set(menubar_SRCS
-    gtkicontable.cpp
     menubarapplet.cpp
     menucloner.cpp
     menuutils.cpp
     menuwidget.cpp
-    registrar.cpp
+    importer_interface.cpp
+    kappmenuimporter.cpp
     windowmenumanager.cpp
     )
-
-qt4_add_dbus_adaptor(menubar_SRCS com.canonical.AppMenu.Registrar.xml
-    registrar.h Registrar)
 
 qt4_add_dbus_adaptor(menubar_SRCS com.canonical.AppMenu.Renderer.xml
     menubarapplet.h MenuBarApplet)
