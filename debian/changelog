@@ -1,3 +1,14 @@
+plasma-widget-menubar (0.2.0-1) unstable; urgency=medium
+
+  * [88906e3] Imported Upstream version 0.2.0
+  * [576d447] fix lintian warning for machine readable (1.0) format
+  * [b1c6b3a] fix license field order
+  * [798a224] Add Recommends on appmenu-qt
+  * [cffcf70] Update Vcs links
+  * [c39d075] Enable hardening build
+
+ -- Ritesh Raj Sarraf <rrs@debian.org>  Wed, 15 Oct 2014 13:28:25 +0530
+
 plasma-widget-menubar (0.1.17-1) unstable; urgency=low
 
   * New upstream release
